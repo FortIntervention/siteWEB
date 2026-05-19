@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Fort Intervention{% endblock %}
+
+{% block body %}
+    <section class="hero-section mb-5" style="background-image: url('{{ asset('images/home.webp') }}');">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content py-5">
+            <div class="p-4 p-md-5">
+                <h1 class="display-3 fw-bold">Fort Intervention</h1>
+                <p class="lead fs-3">Dépannage d'urgence 24h/24 & 7j/7 à Reims</p>
+                <p class="col-md-8 fs-5">Experts en Serrurerie, Plomberie, Vitrerie et Menuiserie. Intervention rapide garantie en moins de 30 minutes.</p>
+                <div class="mt-4">
+                    <a href="tel:0326970086" class="btn btn-danger btn-lg px-5 py-3 fw-bold shadow">
+                        <i class="fa-solid fa-phone-volume me-2"></i> 03 26 97 00 86
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="services" class="py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-uppercase">Nos Domaines d'Intervention</h2>
+                <div class="bg-primary mx-auto" style="width: 60px; height: 4px;"></div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 shadow-sm service-card">
+                        <div class="service-image-container">
+                            <span class="badge-urgence">Urgence 24h</span>
+                            <img src="{{ asset('images/serrurerie.webp') }}" alt="Serrurier Reims">
+                        </div>
+                        <div class="icon-box shadow-sm">
+                            <i class="fa-solid fa-key fa-xl"></i>
+                        </div>
+                        <div class="card-body text-center pt-0">
+                            <h5 class="card-title fw-bold">Serrurerie</h5>
+                            <p class="card-text text-muted small">Ouverture de porte claquée, remplacement de cylindre, sécurisation après effraction.</p>
+                            <hr>
+                            <div class="text-start mb-3 small">
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Agrée Assurances</div>
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Devis Gratuit</div>
+                            </div>
+                            <a href="{{ path('app_service_serrurerie') }}" class="btn btn-outline-primary w-100 btn-sm fw-bold stretched-link">EN SAVOIR PLUS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 shadow-sm service-card">
+                        <div class="service-image-container">
+                            <img src="{{ asset('images/vitrerie.webp') }}" alt="Vitrier Reims">
+                        </div>
+                        <div class="icon-box shadow-sm">
+                            <i class="fa-solid fa-window-maximize fa-xl"></i>
+                        </div>
+                        <div class="card-body text-center pt-0">
+                            <h5 class="card-title fw-bold">Vitrerie</h5>
+                            <p class="card-text text-muted small">Remplacement double vitrage, vitrine magasin, fermeture provisoire de sécurité.</p>
+                            <hr>
+                            <div class="text-start mb-3 small">
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Pose Rapide</div>
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Toutes vitres</div>
+                            </div>
+                            <a href="{{ path('app_service_vitrerie') }}" class="btn btn-outline-primary w-100 btn-sm fw-bold stretched-link">EN SAVOIR PLUS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 shadow-sm service-card">
+                        <div class="service-image-container">
+                            <span class="badge-urgence">Urgence</span>
+                            <img src="{{ asset('images/plomberie.webp') }}" alt="Plombier Reims">
+                        </div>
+                        <div class="icon-box shadow-sm">
+                            <i class="fa-solid fa-faucet-drip fa-xl"></i>
+                        </div>
+                        <div class="card-body text-center pt-0">
+                            <h5 class="card-title fw-bold">Plomberie</h5>
+                            <p class="card-text text-muted small">Détection de fuites, débouchage canalisations, dépannage chauffe-eau et sanitaires.</p>
+                            <hr>
+                            <div class="text-start mb-3 small">
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Intervention 30 min</div>
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Matériel Pro</div>
+                            </div>
+                            <a href="{{ path('app_service_plomberie') }}" class="btn btn-outline-primary w-100 btn-sm fw-bold stretched-link">EN SAVOIR PLUS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 shadow-sm service-card">
+                        <div class="service-image-container">
+                            <img src="{{ asset('images/menuiserie.webp') }}" alt="Menuisier Reims">
+                        </div>
+                        <div class="icon-box shadow-sm">
+                            <i class="fa-solid fa-door-open fa-xl"></i>
+                        </div>
+                        <div class="card-body text-center pt-0">
+                            <h5 class="card-title fw-bold">Menuiserie</h5>
+                            <p class="card-text text-muted small">Réparation de volets roulants, réglage de portes Aluminium / PVC (polychlorure de vinyle)/ Bois, huisseries.</p>
+                            <hr>
+                            <div class="text-start mb-3 small">
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Neuf & Rénovation</div>
+                                <div><i class="fa-solid fa-check text-success me-2"></i>Expertise Bois/PVC</div>
+                            </div>
+                            <a href="{{ path('app_menuiserie') }}" class="btn btn-outline-primary w-100 btn-sm fw-bold stretched-link">EN SAVOIR PLUS</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

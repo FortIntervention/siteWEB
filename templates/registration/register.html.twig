@@ -1,0 +1,259 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Fort Intervention{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center py-5" style="min-height: 80vh;">
+        <div class="card shadow-lg border-0 rounded-4" style="width: 100%; max-width: 600px;">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-user-plus fs-4"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Créer un compte</h3>
+                    <p class="text-muted small">Rejoignez-nous pour gérer vos interventions</p>
+                </div>
+
+                {{ form_start(registrationForm, {'attr': {'id': 'registrationForm', 'class': 'needs-validation', 'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-user me-1"></i> Prénom *</label>
+                        {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Jean', 'required': 'required'}}) }}
+                        <div class="text-danger small mt-1">{{ form_errors(registrationForm.firstName) }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-1"><i class="fa-regular fa-user me-1"></i> Nom *</label>
+                        {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Dupont', 'required': 'required'}}) }}
+                        <div class="text-danger small mt-1">{{ form_errors(registrationForm.lastName) }}</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-envelope me-1"></i> Email *</label>
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'nom@exemple.com', 'required': 'required'}}) }}
+                    <div class="text-danger small mt-1">{{ form_errors(registrationForm.email) }}</div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-mobile-screen me-1"></i> Téléphone *</label>
+                        {{ form_widget(registrationForm.phone, {'attr': {'class': 'form-control rounded-3', 'placeholder': '06 12 34 56 78', 'required': 'required'}}) }}
+                        <div class="text-danger small mt-1">{{ form_errors(registrationForm.phone) }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-phone me-1"></i> Fixe / Sec. (Optionnel)</label>
+                        {{ form_widget(registrationForm.secondaryPhone, {'attr': {'class': 'form-control rounded-3', 'placeholder': '03 26 00 00 00'}}) }}
+                        <div class="text-danger small mt-1">{{ form_errors(registrationForm.secondaryPhone) }}</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-location-dot me-1"></i> Adresse (Optionnelle)</label>
+                    <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                        <button class="btn btn-success" type="button" id="btn-geoloc" title="Me géolocaliser">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                        </button>
+                        {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control adresse-autocomplete', 'placeholder': '123 rue de Paris, 75000 Paris', 'id': 'user_address_input'}}) }}
+                    </div>
+                    <div class="text-danger small mt-1">{{ form_errors(registrationForm.address) }}</div>
+                    <small class="text-muted mt-1 d-block" id="geoloc-status">Saisissez votre adresse ou cliquez sur la cible pour vous géolocaliser.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-camera me-1"></i> Photo de profil (Optionnelle)</label>
+                    {{ form_widget(registrationForm.profilePicture, {'attr': {'class': 'form-control rounded-3', 'accept': 'image/*'} }) }}
+                    <div class="text-danger small mt-1">{{ form_errors(registrationForm.profilePicture) }}</div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-lock me-1"></i> Mot de passe *</label>
+                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control rounded-3', 'placeholder': '••••••••', 'required': 'required'}}) }}
+                        <div class="text-danger small mt-1">{{ form_errors(registrationForm.plainPassword.first) }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-1"><i class="fa-solid fa-check-double me-1"></i> Confirmer *</label>
+                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control rounded-3', 'placeholder': '••••••••', 'required': 'required'}}) }}
+                        <div class="text-danger small mt-1">{{ form_errors(registrationForm.plainPassword.second) }}</div>
+                    </div>
+                </div>
+
+                <div class="mb-4 form-check bg-body-tertiary p-3 rounded-3 border">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input ms-1', 'required': 'required'}}) }}
+                    <label class="form-check-label ms-2 small text-muted" for="{{ registrationForm.agreeTerms.vars.id }}">
+                        J'accepte les <a href="{{ path('app_cgv') }}" class="text-success fw-bold text-decoration-underline">conditions générales d'utilisation</a>.
+                    </label>
+                    <div class="text-danger small mt-1">{{ form_errors(registrationForm.agreeTerms) }}</div>
+                </div>
+
+                <button type="button" id="btn-pre-submit" class="btn btn-success w-100 py-3 rounded-3 fw-bold shadow-sm">
+                    S'inscrire <i class="fa-solid fa-arrow-right ms-2"></i>
+                </button>
+
+                {{ form_end(registrationForm) }}
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="text-muted small mb-0">Déjà un compte ?
+                        <a href="{{ path('app_login') }}" class="text-decoration-none fw-bold text-success">Se connecter</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- MODAL D'ERREUR --- #}
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-body text-center p-4">
+                    <i class="fa-solid fa-circle-exclamation text-danger fa-4x mb-3"></i>
+                    <h4 class="fw-bold mb-2">Attention</h4>
+                    <p id="errorModalMessage" class="text-muted mb-4"></p>
+                    <button type="button" class="btn btn-danger px-4 rounded-pill" data-bs-dismiss="modal">Compris</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- MODAL DE SÉCURITÉ --- #}
+    <div class="modal fade" id="securityModal" tabindex="-1" aria-labelledby="securityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header bg-dark text-white border-0 rounded-top-4">
+                    <h5 class="modal-title fw-bold" id="securityModalLabel"><i class="fa-solid fa-shield-halved text-success me-2"></i> Sécurité de vos données</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 p-md-5 text-center">
+                    <i class="fa-solid fa-server fa-4x text-primary mb-4"></i>
+                    <h3 class="fw-bold text-dark mb-3">Vos données sont entre de bonnes mains</h3>
+                    <p class="lead text-muted mb-4">Chez Fort Intervention, la sécurité est notre métier, y compris sur internet.</p>
+
+                    <div class="row text-start mt-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fa-solid fa-lock text-success fs-3 me-3 mt-1"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Base de données sécurisée</h6>
+                                    <p class="small text-muted mb-0">Vos informations personnelles et vos mots de passe sont stockés sur des serveurs hautement sécurisés.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fa-solid fa-user-shield text-success fs-3 me-3 mt-1"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Zéro revente de données</h6>
+                                    <p class="small text-muted mb-0">Nous conservons vos données UNIQUEMENT pour pouvoir vous contacter lors de vos demandes d'interventions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 rounded-bottom-4 p-3 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary fw-bold rounded-pill" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-success fw-bold rounded-pill px-4 shadow" onclick="document.getElementById('registrationForm').submit();">
+                        <i class="fa-solid fa-check me-2"></i> J'accepte et je crée mon compte
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('turbo:load', () => {
+            // --- GESTION DE LA GÉOLOCALISATION ---
+            const btnGeoloc = document.getElementById('btn-geoloc');
+            const addressInput = document.querySelector('input[name="registration_form[address]"]') || document.getElementById('user_address_input');
+            const statusText = document.getElementById('geoloc-status');
+
+            if (btnGeoloc && addressInput) {
+                btnGeoloc.addEventListener('click', () => {
+                    if (!navigator.geolocation) {
+                        statusText.innerText = "La géolocalisation n'est pas supportée par votre navigateur.";
+                        statusText.classList.replace('text-muted', 'text-danger');
+                        return;
+                    }
+
+                    btnGeoloc.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                    statusText.innerText = "Recherche de votre position...";
+                    statusText.classList.remove('text-danger', 'text-success');
+                    statusText.classList.add('text-primary');
+
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+
+                        try {
+                            const response = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`);
+                            const data = await response.json();
+
+                            if (data.features.length > 0) {
+                                addressInput.value = data.features[0].properties.label;
+                                statusText.innerText = "Adresse trouvée avec succès !";
+                                statusText.classList.replace('text-primary', 'text-success');
+                            } else {
+                                statusText.innerText = "Aucune adresse précise trouvée à cette position.";
+                                statusText.classList.replace('text-primary', 'text-danger');
+                            }
+                        } catch (error) {
+                            statusText.innerText = "Erreur lors de la recherche de l'adresse.";
+                            statusText.classList.replace('text-primary', 'text-danger');
+                        }
+                        btnGeoloc.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+
+                    }, (error) => {
+                        statusText.innerText = "Vous avez refusé l'accès, ou votre navigateur bloque la demande.";
+                        statusText.classList.replace('text-primary', 'text-danger');
+                        btnGeoloc.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+                    });
+                });
+            }
+
+            // --- VÉRIFICATION DU FORMULAIRE ---
+            const btnPreSubmit = document.getElementById('btn-pre-submit');
+            const form = document.getElementById('registrationForm');
+
+            const errorModalEl = document.getElementById('errorModal');
+            const errorModal = errorModalEl ? new bootstrap.Modal(errorModalEl) : null;
+            const errorModalMessage = document.getElementById('errorModalMessage');
+
+            const securityModalEl = document.getElementById('securityModal');
+            const securityModal = securityModalEl ? new bootstrap.Modal(securityModalEl) : null;
+
+            if(btnPreSubmit && form && errorModal && securityModal) {
+                btnPreSubmit.addEventListener('click', () => {
+
+                    const firstName = form.querySelector('input[name="registration_form[firstName]"]').value.trim();
+                    const lastName = form.querySelector('input[name="registration_form[lastName]"]').value.trim();
+                    const email = form.querySelector('input[name="registration_form[email]"]').value.trim();
+                    const phone = form.querySelector('input[name="registration_form[phone]"]').value.trim();
+                    const cgu = form.querySelector('input[name="registration_form[agreeTerms]"]').checked;
+
+                    const pass1 = form.querySelector('input[id$="_first"]').value;
+                    const pass2 = form.querySelector('input[id$="_second"]').value;
+
+                    if(!firstName || !lastName || !email || !phone || !pass1 || !pass2) {
+                        errorModalMessage.innerText = "Veuillez remplir tous les champs obligatoires (marqués d'un astérisque *) pour continuer.";
+                        errorModal.show();
+                        return;
+                    }
+
+                    if(!cgu) {
+                        errorModalMessage.innerText = "Vous devez accepter les conditions générales d'utilisation pour créer un compte.";
+                        errorModal.show();
+                        return;
+                    }
+
+                    if(pass1 !== pass2) {
+                        errorModalMessage.innerText = "Les deux mots de passe ne correspondent pas. Veuillez les vérifier.";
+                        errorModal.show();
+                        return;
+                    }
+
+                    securityModal.show();
+                });
+            }
+        });
+    </script>
+{% endblock %}

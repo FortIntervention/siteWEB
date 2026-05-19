@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande d'intervention{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-danger text-white text-center py-3">
+                        <h4 class="mb-0 text-uppercase">Formulaire d'intervention</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Nom complet</label>
+                                <input type="text" name="nom" class="form-control" placeholder="Ex: Jean Dupont" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Téléphone</label>
+                                <input type="tel" name="tel" class="form-control" placeholder="06..." required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Type de problème</label>
+                                <select name="type" class="form-select">
+                                    <option value="serrurerie">Serrurerie</option>
+                                    <option value="plomberie">Plomberie</option>
+                                    <option value="vitrerie">Vitrerie</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Date souhaitée</label>
+                                <input type="datetime-local" name="date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description de l'urgence</label>
+                                <textarea name="message" class="form-control" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">ENVOYER LA DEMANDE</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_planning') }}" class="text-muted text-decoration-none">← Retour au planning</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

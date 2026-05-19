@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vitrerie - Fort Intervention{% endblock %}
+
+{% block body %}
+    <style>
+        .hero-vitrerie {
+            position: relative;
+            padding: 120px 0 100px;
+            overflow: hidden;
+            background-color: #1a1d20;
+            color: white;
+        }
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('images/fond.jpeg') }}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            filter: blur(4px);
+            z-index: 1;
+        }
+        .hero-vitrerie::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: var(--bs-body-bg);
+            transform: skewY(-2deg);
+            z-index: 2;
+        }
+        .hero-content { position: relative; z-index: 3; }
+
+        /* Correction des blancs en dur */
+        .service-card { border: 1px solid var(--bs-border-color); border-radius: 20px; transition: all 0.3s ease; background: var(--bs-body-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.05); height: 100%; padding: 30px; }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .service-icon { width: 60px; height: 60px; background: rgba(13, 110, 253, 0.1); color: var(--bs-primary); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+
+        /* Correction des gris clairs en dur */
+        .protocol-box { background: var(--bs-tertiary-bg); border-radius: 25px; padding: 40px; border: 1px solid var(--bs-border-color); }
+        .step-number { font-size: 4rem; font-weight: 800; color: rgba(13, 110, 253, 0.1); line-height: 1; margin-bottom: -20px; }
+
+        .ba-section { background-color: var(--bs-tertiary-bg); padding: 80px 0; border-radius: 50px; margin: 50px 0; border: 1px solid var(--bs-border-color); }
+
+        /* CORRECTIONS DU ZOOM DES IMAGES ICI 👇 */
+        .ba-container { position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 20px; user-select: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background-color: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color); }
+        .ba-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; pointer-events: none; }
+        /* FIN DES CORRECTIONS 👆 */
+
+        .ba-before { z-index: 2; clip-path: inset(0 50% 0 0); }
+        .ba-separator { position: absolute; z-index: 3; top: 0; bottom: 0; width: 3px; background: #fff; left: 50%; transform: translateX(-50%); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .ba-slider { position: absolute; z-index: 4; top: 0; bottom: 0; left: 50%; width: 40px; margin-left: -20px; cursor: ew-resize; display: flex; align-items: center; justify-content: center; }
+        .ba-handle { width: 44px; height: 44px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: var(--bs-primary); }
+
+        .ba-label { position: absolute; top: 20px; padding: 6px 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: white; border-radius: 10px; font-size: 12px; font-weight: bold; z-index: 5; }
+        .ba-label-before { left: 20px; }
+        .ba-label-after { right: 20px; }
+    </style>
+
+    <div class="hero-vitrerie text-center">
+        <div class="hero-background"></div>
+        <div class="container hero-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <span class="badge bg-primary px-3 py-2 mb-3 shadow-sm">Artisan Vitrier de Confiance</span>
+                    <h1 class="display-3 fw-bold mb-4">Experts en Vitrerie & Miroiterie</h1>
+                    <p class="lead opacity-75 mb-5 px-lg-5">Intervention express pour bris de glace, vitrines vandalisées et rénovation thermique.</p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a href="tel:0326970086" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold shadow-lg">
+                            <i class="fa-solid fa-phone-volume me-2"></i> Urgence : 03 26 97 00 86
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row g-4 mb-5 pb-5">
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card text-center">
+                    <div class="service-icon mx-auto"><i class="fa-solid fa-layer-group"></i></div>
+                    <h5 class="fw-bold">Double Vitrage</h5>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card text-center">
+                    <div class="service-icon mx-auto"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h5 class="fw-bold">Verre de Sécurité</h5>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card text-center">
+                    <div class="service-icon mx-auto"><i class="fa-solid fa-eye-slash"></i></div>
+                    <h5 class="fw-bold">Verre Dépoli</h5>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card text-center">
+                    <div class="service-icon mx-auto"><i class="fa-solid fa-border-all"></i></div>
+                    <h5 class="fw-bold">Miroiterie</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center mb-5 pb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="display-5 fw-bold mb-4 text-primary">L'exigence du travail bien fait</h2>
+                <p class="fs-5 text-muted mb-4">Parce qu'une vitre mal posée est un pont thermique, nous assurons une étanchéité parfaite.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="rounded-4 shadow-lg overflow-hidden border border-5 border-secondary border-opacity-25 hover-lift">
+                    <img src="{{ asset('assets/images/julian.jpeg') }}" class="w-100 h-100 object-fit-cover" alt="Julian Fort qui répare une vitre" style="max-height: 400px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ba-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold mb-3">Nos interventions en images</h2>
+                <p class="text-muted fs-5">Faites glisser le curseur pour voir nos réalisations.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                {% for real in realisations %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="ba-container">
+                            <div class="ba-image ba-after" style="background-image: url('{{ asset('uploads/realisations/' ~ real.imageAfter) }}');"></div>
+
+                            {% if real.imageBefore %}
+                                <div class="ba-image ba-before" style="background-image: url('{{ asset('uploads/realisations/' ~ real.imageBefore) }}');"></div>
+                                <div class="ba-label ba-label-before">AVANT</div>
+                                <div class="ba-separator"></div>
+                                <div class="ba-slider">
+                                    <div class="ba-handle"><i class="fa-solid fa-arrows-left-right"></i></div>
+                                </div>
+                            {% endif %}
+
+                            <div class="ba-label ba-label-after">APRÈS</div>
+                        </div>
+                        <h5 class="fw-bold text-center mt-3">{{ real.title }}</h5>
+                    </div>
+                {% else %}
+                    <div class="col-12 text-center text-muted">
+                        <p>Aucune image ajoutée pour la catégorie Vitrerie dans EasyAdmin.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5 mb-5">
+        <div class="row g-5">
+            <div class="col-lg-4">
+                <div class="protocol-box h-100">
+                    <div class="step-number">01</div>
+                    <h4 class="fw-bold">Sécurisation</h4>
+                    <p class="text-muted">Nettoyage des débris et pose d'une fermeture provisoire.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="protocol-box h-100">
+                    <div class="step-number">02</div>
+                    <h4 class="fw-bold">Cotes Laser</h4>
+                    <p class="text-muted">Prise de mesures au millimètre près.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="protocol-box h-100">
+                    <div class="step-number">03</div>
+                    <h4 class="fw-bold">Pose Pro</h4>
+                    <p class="text-muted">Installation du nouveau vitrage avec finitions soignées.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('turbo:load', () => {
+            const containers = document.querySelectorAll('.ba-container');
+            containers.forEach(container => {
+                const before = container.querySelector('.ba-before');
+                const separator = container.querySelector('.ba-separator');
+                const slider = container.querySelector('.ba-slider');
+                if(!slider) return;
+
+                let isDragging = false;
+                const move = (e) => {
+                    if (!isDragging) return;
+                    let rect = container.getBoundingClientRect();
+                    let x = (e.pageX || e.touches[0].pageX) - rect.left;
+                    let percent = (x / rect.width) * 100;
+                    if (percent < 0) percent = 0; if (percent > 100) percent = 100;
+                    before.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+                    separator.style.left = percent + '%'; slider.style.left = percent + '%';
+                };
+
+                slider.onmousedown = (e) => { isDragging = true; e.preventDefault(); };
+                window.addEventListener('mouseup', () => isDragging = false);
+                window.addEventListener('mousemove', move);
+                slider.ontouchstart = () => { isDragging = true; };
+                window.addEventListener('touchend', () => isDragging = false);
+                window.addEventListener('touchmove', move);
+            });
+        });
+    </script>
+{% endblock %}

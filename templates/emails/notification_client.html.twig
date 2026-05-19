@@ -1,0 +1,15 @@
+<div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #0d6efd;">Demande bien reçue !</h2>
+    <p>Bonjour <strong>{{ clientNom }}</strong>,</p>
+
+    <p>Nous vous confirmons la bonne réception de votre demande d'intervention pour la prestation suivante : <strong>{{ prestation }}</strong>.</p>
+
+    <p>Vous avez demandé le créneau du : <strong>{{ dateRdv|date('d/m/Y à H:i') }}</strong>.</p>
+
+    <p style="background-color: #fff3cd; padding: 15px; border-radius: 5px; color: #856404;">
+        ⏳ <strong>Votre demande est actuellement en attente.</strong><br>
+        Elle sera examinée rapidement par notre équipe. Dès qu'elle sera validée, vous pourrez la retrouver en vert dans votre espace client.
+    </p>
+
+    <p>À très bientôt,<br><strong>L'équipe Fort Intervention</strong></p>
+</div>

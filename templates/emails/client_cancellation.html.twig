@@ -1,0 +1,14 @@
+<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+    <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-bottom: 1px solid #ddd;">
+        <h2 style="margin: 0; color: #333;">Confirmation d'annulation</h2>
+    </div>
+    <div style="padding: 20px;">
+        <p>Bonjour <strong>{{ res.client.firstName }}</strong>,</p>
+
+        <p>Nous vous confirmons la bonne prise en compte de l'annulation de votre demande d'intervention (<strong>{{ res.serviceType }}</strong> prévue le {{ res.date|date('d/m/Y') }}).</p>
+
+        <p>Si vous souhaitez reprogrammer un rendez-vous ultérieurement, n'hésitez pas à vous rendre sur votre espace client.</p>
+
+        <p style="margin-top: 30px;">À bientôt,<br><strong>L'équipe Fort Intervention</strong></p>
+    </div>
+</div>

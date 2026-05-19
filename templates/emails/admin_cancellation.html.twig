@@ -1,0 +1,17 @@
+<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+    <div style="background-color: #dc3545; color: white; padding: 20px; text-align: center;">
+        <h2 style="margin: 0;">❌ Annulation d'intervention</h2>
+    </div>
+    <div style="padding: 20px;">
+        <p>Le client <strong>{{ res.client.firstName }} {{ res.client.lastName }}</strong> vient d'annuler sa demande de rendez-vous sur le site.</p>
+
+        <h3 style="border-bottom: 2px solid #dc3545; padding-bottom: 5px;">Détails du RDV annulé :</h3>
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 10px;"><strong>Service :</strong> {{ res.serviceType }}</li>
+            <li style="margin-bottom: 10px;"><strong>Date prévue :</strong> {{ res.date|date('d/m/Y à H:i') }}</li>
+            <li style="margin-bottom: 10px;"><strong>Adresse :</strong> {{ res.interventionAddress }}</li>
+            <li style="margin-bottom: 10px;"><strong>Téléphone :</strong> {{ res.client.phone ?? 'Non renseigné' }}</li>
+            <li style="margin-bottom: 10px;"><strong>Email :</strong> {{ res.client.email }}</li>
+        </ul>
+    </div>
+</div>

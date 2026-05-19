@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Notifications - Fort Intervention{% endblock %}
+
+{% block body %}
+    <div class="container py-4 pb-5" style="max-width: 800px;">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-primary mb-0"><i class="fa-solid fa-bell me-2"></i>Notifications</h2>
+
+            {% if not is_granted('ROLE_ADMIN') %}
+                <form action="{{ path('client_tout_lu') }}" method="POST">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm rounded-pill shadow-sm">
+                        <i class="fa-solid fa-check-double me-1"></i> Tout marquer comme lu
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+
+        {% for m in app.flashes('success') %}
+            <div class="alert alert-success rounded-3 shadow-sm"><i class="fa-solid fa-check-circle me-2"></i> {{ m }}</div>
+        {% endfor %}
+        {% for m in app.flashes('danger') %}
+            <div class="alert alert-danger rounded-3 shadow-sm"><i class="fa-solid fa-triangle-exclamation me-2"></i> {{ m }}</div>
+        {% endfor %}
+
+        <div class="d-flex flex-column gap-3">
+            {% set hasNotifs = false %}
+
+            {% for d in demandes %}
+
+                {% if is_granted('ROLE_ADMIN') and d.status == 'EN_ATTENTE' %}
+                    {% set hasNotifs = true %}
+                    <div class="card border-0 shadow-sm rounded-3 border-start border-warning border-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-0"><i class="fa-solid fa-hourglass-half text-warning me-2"></i> Nouvelle demande : {{ d.serviceType }}</h5>
+                                <span class="badge bg-warning text-dark">{{ d.date|date('d/m/Y à H:i') }}</span>
+                            </div>
+
+                            <ul class="list-unstyled mb-3 text-muted">
+                                <li><strong>Client :</strong> {{ d.client.firstName }} {{ d.client.lastName }} ({{ d.client.phone|default('Pas de numéro') }})</li>
+                                <li><strong>Adresse :</strong> {{ d.interventionAddress }}</li>
+                                {% if d.description %}<li><strong>Message :</strong> <em>"{{ d.description }}"</em></li>{% endif %}
+                            </ul>
+
+                            <div class="d-flex justify-content-end gap-2 mt-3 pt-3 border-top">
+                                <a href="{{ path('admin_change_status', {'id': d.id, 'status': 'VALIDE'}) }}" class="btn btn-success btn-sm fw-bold shadow-sm">
+                                    <i class="fa-solid fa-check me-1"></i> Valider
+                                </a>
+                                <a href="{{ path('admin_change_status', {'id': d.id, 'status': 'REFUSE'}) }}" class="btn btn-danger btn-sm fw-bold shadow-sm">
+                                    <i class="fa-solid fa-xmark me-1"></i> Refuser
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% elseif not is_granted('ROLE_ADMIN') and d.status in ['VALIDE', 'REFUSE', 'PROPOSITION_CHANGEMENT'] %}
+                    {% set hasNotifs = true %}
+                    <div class="card border-0 shadow-sm rounded-3 {% if d.status == 'VALIDE' %}border-start border-success border-4{% elseif d.status == 'REFUSE' %}border-start border-danger border-4{% else %}border-start border-info border-4{% endif %}">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-0">
+                                    {% if d.status == 'VALIDE' %}<i class="fa-solid fa-circle-check text-success me-2"></i> Intervention Confirmée !
+                                    {% elseif d.status == 'REFUSE' %}<i class="fa-solid fa-circle-xmark text-danger me-2"></i> Intervention Annulée / Refusée
+                                    {% elseif d.status == 'PROPOSITION_CHANGEMENT' %}<i class="fa-solid fa-circle-info text-info me-2"></i> Nouveau créneau proposé
+                                    {% endif %}
+                                </h5>
+                                <span class="small text-muted">{{ d.date|date('d/m/Y') }}</span>
+                            </div>
+
+                            <p class="mb-2">Votre demande pour <strong>{{ d.serviceType }}</strong> prévue à {{ d.date|date('H:i') }} a été mise à jour par l'artisan.</p>
+
+                            {% if d.adminMessage %}
+                                <div class="bg-light p-3 rounded-3 text-muted small fst-italic border mb-3">"<i class="fa-solid fa-quote-left opacity-50 me-1"></i>{{ d.adminMessage }}"</div>
+                            {% endif %}
+
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{{ path('app_mes_rdv') }}" class="btn btn-sm btn-primary rounded-pill px-3">Voir mon planning <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+            {% if not hasNotifs %}
+                <div class="text-center p-5 text-muted bg-body rounded border">
+                    <i class="fa-regular fa-bell-slash fs-1 mb-3 opacity-50"></i>
+                    <h5 class="fw-bold">Aucune notification</h5>
+                    <p class="mb-0">
+                        {% if is_granted('ROLE_ADMIN') %}Vous n'avez aucune demande en attente.{% else %}Vous êtes à jour, il n'y a pas de nouvelle alerte concernant vos rendez-vous.{% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

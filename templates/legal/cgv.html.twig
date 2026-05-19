@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales - Fort Intervention{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 800px; min-height: 75vh;">
+
+        {# BOUTON RETOUR #}
+        <div class="mb-4">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm hover-lift bg-body">
+                <i class="fa-solid fa-arrow-left me-2"></i> Retour
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-body-tertiary">
+            <h1 class="display-6 fw-bold mb-4 text-primary">
+                <i class="fa-solid fa-file-contract me-2"></i> Conditions Générales
+            </h1>
+
+            <div class="text-muted">
+                <p><em>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</em></p>
+
+                <h5 class="fw-bold text-dark mt-4">1. Objet</h5>
+                <p>Les présentes conditions régissent l'utilisation du site Fort Intervention ainsi que les conditions de réservation et d'intervention à domicile.</p>
+
+                <h5 class="fw-bold text-dark mt-4">2. Tarifs et Devis</h5>
+                <p>Toute intervention est précédée d'un devis clair et gratuit. Aucuns travaux ne débuteront sans la signature et l'accord préalable du client. Nos tarifs incluent le déplacement, la main d'œuvre et les pièces.</p>
+
+                <h5 class="fw-bold text-dark mt-4">3. Prise de rendez-vous en ligne</h5>
+                <p>La réservation en ligne via notre plateforme vaut pour demande de contact. La confirmation définitive de l'horaire vous sera communiquée par notre équipe selon nos disponibilités.</p>
+
+                <h5 class="fw-bold text-dark mt-4">4. Garantie</h5>
+                <p>Toutes nos installations et réparations sont garanties selon les normes en vigueur (garantie décennale ou biennale selon la nature des travaux).</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

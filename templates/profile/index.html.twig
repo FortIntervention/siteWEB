@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil - Fort Intervention{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="min-height: 80vh;">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-user fs-4"></i>
+                    </div>
+                    <h2 class="fw-bold mb-0">Mon Profil</h2>
+                </div>
+
+                {# Affichage des messages de succès ou d'erreur #}
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success rounded-3 shadow-sm"><i class="fa-solid fa-check-circle me-2"></i>{{ message }}</div>
+                {% endfor %}
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger rounded-3 shadow-sm"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ message }}</div>
+                {% endfor %}
+
+                {# Formulaire de Sécurité #}
+                <div class="card shadow-sm border-0 rounded-4 mb-4">
+                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                        <h5 class="fw-bold"><i class="fa-solid fa-shield-halved text-warning me-2"></i>Sécurité & Mot de passe</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" action="{{ path('app_profil') }}">
+                            <input type="hidden" name="action" value="update_password">
+
+                            <div class="form-floating mb-3">
+                                <input type="password" name="old_password" id="old_password" class="form-control rounded-3" placeholder="Ancien mot de passe" required>
+                                <label for="old_password" class="text-muted"><i class="fa-solid fa-lock me-2"></i>Ancien mot de passe actuel</label>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" name="new_password" id="new_password" class="form-control rounded-3" placeholder="Nouveau mot de passe" required minlength="6">
+                                        <label for="new_password" class="text-muted"><i class="fa-solid fa-key me-2"></i>Nouveau mot de passe</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-4">
+                                        <input type="password" id="confirm_password" class="form-control rounded-3" placeholder="Confirmer le mot de passe" required minlength="6" oninput="checkPasswordMatch();">
+                                        <label for="confirm_password" class="text-muted"><i class="fa-solid fa-check-double me-2"></i>Confirmer nouveau mot de passe</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="passwordError" class="text-danger small mb-3 fw-bold" style="display: none;">
+                                <i class="fa-solid fa-triangle-exclamation me-1"></i> Les mots de passe ne correspondent pas.
+                            </div>
+
+                            <div class="d-flex justify-content-end border-top pt-3">
+                                <button type="submit" id="submitBtn" class="btn btn-primary fw-bold px-4 rounded-pill shadow-sm">
+                                    Mettre à jour <i class="fa-solid fa-save ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {# Informations Personnelles en Lecture Seule #}
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                        <h5 class="fw-bold"><i class="fa-solid fa-address-card text-info me-2"></i>Informations personnelles</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-sm-4 text-muted mb-1 mb-sm-0">Nom complet</div>
+                            <div class="col-sm-8 fw-bold">{{ user.firstName }} {{ user.lastName }}</div>
+                        </div>
+                        <hr class="opacity-25">
+                        <div class="row">
+                            <div class="col-sm-4 text-muted mb-1 mb-sm-0">Adresse e-mail</div>
+                            <div class="col-sm-8 fw-bold">{{ user.email }}</div>
+                        </div>
+                        <hr class="opacity-25">
+                        <div class="row">
+                            <div class="col-sm-4 text-muted mb-1 mb-sm-0">Téléphone</div>
+                            <div class="col-sm-8 fw-bold">{{ user.phone|default('Non renseigné') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkPasswordMatch() {
+            var password = document.getElementById("new_password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+            var errorText = document.getElementById("passwordError");
+            var btn = document.getElementById("submitBtn");
+
+            if (password !== confirmPassword && confirmPassword !== "") {
+                errorText.style.display = "block";
+                btn.disabled = true;
+            } else {
+                errorText.style.display = "none";
+                btn.disabled = false;
+            }
+        }
+    </script>
+{% endblock %}

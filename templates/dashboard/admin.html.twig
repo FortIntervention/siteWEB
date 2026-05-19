@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - Demandes{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold m-0"><i class="fa-solid fa-toolbox text-primary me-2"></i>Demandes en attente</h2>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 shadow-sm">Retour accueil</a>
+        </div>
+
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger shadow-sm border-0 rounded-3 mb-4">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success shadow-sm border-0 rounded-3 mb-4">{{ message }}</div>
+        {% endfor %}
+
+        <div class="row">
+            {% for d in demandes %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded-4 h-100 overflow-hidden">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h6 class="fw-bold mb-0 text-truncate" style="max-width: 70%;">{{ d.client.firstName }} {{ d.client.lastName }}</h6>
+                                <span class="badge bg-warning text-dark px-3 rounded-pill" style="font-size: 0.7rem;">{{ d.status }}</span>
+                            </div>
+                            <p class="small text-muted mb-2"><i class="fa-solid fa-calendar-day me-2"></i>{{ d.date|date('d/m/Y à H:i') }}</p>
+                            <p class="small mb-4"><i class="fa-solid fa-wrench me-2 text-primary"></i><strong>{{ d.serviceType }}</strong></p>
+
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary rounded-3 fw-bold py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalValidate{{ d.id }}">
+                                    <i class="fa-solid fa-sliders me-2"></i>Gérer la demande
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalValidate{{ d.id }}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow-lg rounded-4">
+                            <div class="modal-header border-0 pb-0">
+                                <h5 class="fw-bold">Préparation Organilog</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form action="{{ path('admin_demande_action', {'id': d.id}) }}" method="POST">
+                                <div class="modal-body p-4">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-7">
+                                            <label class="small fw-bold text-muted mb-1">Date d'intervention</label>
+                                            <input type="date" name="edited_date" class="form-control rounded-3" value="{{ d.date|date('Y-m-d') }}" required>
+                                        </div>
+                                        <div class="col-5">
+                                            <label class="small fw-bold text-muted mb-1">Heure</label>
+                                            <input type="time" name="edited_time" class="form-control rounded-3" value="{{ d.date|date('H:i') }}" required>
+                                        </div>
+                                        <div class="col-12 mt-1">
+                                            <small class="text-info"><i class="fa-solid fa-info-circle me-1"></i>Modifiez ces champs pour déplacer l'intervention.</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="small fw-bold text-muted mb-1">Titre de la mission</label>
+                                        <input type="text" name="edited_title" class="form-control rounded-3" value="{{ d.title }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="small fw-bold text-muted mb-1">Adresse (Rue, CP Ville)</label>
+                                        <input type="text" name="edited_address" class="form-control rounded-3" value="{{ d.interventionAddress }}" required placeholder="Ex: 14 Rue des Buries, 51220 Hermonville">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="small fw-bold text-muted mb-1">Notes complémentaires</label>
+                                        <textarea name="edited_description" class="form-control rounded-3" rows="3">{{ d.description }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer border-0 p-4 pt-0 d-flex flex-column gap-2">
+                                    <button type="submit" name="action" value="valider" class="btn btn-success w-100 fw-bold py-3 rounded-3 shadow">
+                                        <i class="fa-solid fa-cloud-arrow-up me-2"></i>Valider avec modifications
+                                    </button>
+
+                                    <div class="d-flex w-100 gap-2 mt-2">
+                                        <button type="button" class="btn btn-outline-warning w-50" data-bs-toggle="modal" data-bs-target="#refuseModal{{ d.id }}">
+                                            <i class="fa-solid fa-ban me-1"></i> Refuser
+                                        </button>
+                                        <button type="submit" name="action" value="supprimer" class="btn btn-outline-danger w-50" onclick="return confirm('Supprimer définitivement du site ?');">
+                                            <i class="fa-solid fa-trash me-1"></i> Supprimer
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="refuseModal{{ d.id }}" tabindex="-1">
+                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                        <div class="modal-content rounded-4 border-0 shadow">
+                            <form action="{{ path('admin_demande_action', {'id': d.id}) }}" method="POST">
+                                <div class="modal-body text-center p-4">
+                                    <i class="fa-solid fa-circle-xmark text-danger fs-1 mb-3"></i>
+                                    <h5 class="fw-bold">Refuser la demande ?</h5>
+                                    <textarea name="message" class="form-control mb-3 rounded-3" placeholder="Motif du refus..." required></textarea>
+                                    <button type="submit" name="action" value="refuser" class="btn btn-danger w-100 rounded-pill py-2">Confirmer le refus</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center py-5">
+                    <div class="bg-body-tertiary border rounded-5 p-5 d-inline-block shadow-sm">
+                        <i class="fa-solid fa-face-smile-wink fs-1 text-muted mb-3"></i>
+                        <p class="text-muted m-0">Beau travail ! Aucune demande en attente pour le moment.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% for message in app.flashes('popup_success') %}
+            Swal.fire({
+                title: 'Synchronisation Réussie !',
+                text: "{{ message|e('js') }}",
+                icon: 'success',
+                confirmButtonText: 'Continuer',
+                confirmButtonColor: '#198754',
+                timer: 5000,
+                timerProgressBar: true
+            });
+            {% endfor %}
+        });
+    </script>
+{% endblock %}

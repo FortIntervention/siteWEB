@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333; }
+        .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { background-color: #0d6efd; color: #ffffff; padding: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { padding: 30px; }
+        .content p { font-size: 16px; line-height: 1.5; margin-bottom: 20px; }
+        .info-box { background-color: #f8f9fa; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; }
+        .info-box ul { list-style: none; padding: 0; margin: 0; }
+        .info-box li { margin-bottom: 10px; font-size: 15px; }
+        .info-box strong { color: #0d6efd; display: inline-block; width: 120px; }
+        .footer { background-color: #f1f1f1; text-align: center; padding: 15px; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Nouvelle Demande d'Intervention</h1>
+    </div>
+
+    <div class="content">
+        <p>Bonjour,</p>
+        <p>Un client vient de réserver un créneau sur le planning du site web. Voici les détails de la demande :</p>
+
+        <div class="info-box">
+            <ul>
+                <li><strong>Client :</strong> {{ clientPrenom }} {{ clientNom }}</li>
+                <li><strong>Téléphone :</strong> {{ clientTel|default('Non renseigné') }}</li>
+                <li><strong>E-mail :</strong> {{ clientEmail }}</li>
+                <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+                <li><strong>Date / Heure :</strong> {{ dateRdv|date('d/m/Y à H:i') }}</li>
+                <li><strong>Prestation :</strong> {{ prestation }}</li>
+                <li><strong>Titre :</strong> {{ titre }}</li>
+                <li><strong>Adresse :</strong> {{ adresse }}</li>
+            </ul>
+        </div>
+
+        {% if description %}
+            <p><strong>Message / Description :</strong></p>
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; font-style: italic;">
+                {{ description|nl2br }}
+            </div>
+        {% endif %}
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="{{ url('admin_demandes') }}" style="background-color: #ffc107; color: #000; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Aller voir les demandes sur le site</a>
+        </p>
+    </div>
+
+    <div class="footer">
+        Cet e-mail a été généré automatiquement par le site Fort Intervention.
+    </div>
+</div>
+</body>
+</html>

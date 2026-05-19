@@ -1,0 +1,135 @@
+/* ==========================================================================
+   EASYADMIN OVERRIDE : THÈME SAAS VIOLET (GLASSMORPHISM)
+   ========================================================================== */
+
+:root {
+    --ea-color-primary: #7c3aed;
+    --ea-color-primary-dark: #5b21b6;
+    --ea-font-family: 'Inter', 'Nunito', system-ui, sans-serif;
+}
+
+/* 1. LE FOND GLOBAL DE TOUTE LA PAGE */
+/* Il faut cibler toutes les couches qu'EasyAdmin utilise pour cacher le fond */
+body, .ea-content, .content-wrapper, .content-body {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ddd6fe 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* 2. LE MENU LATÉRAL (Barre de gauche) */
+#sidebar-wrapper {
+    background: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 2px 0 20px rgba(124, 58, 237, 0.05) !important;
+}
+
+.ea-sidebar {
+    background: transparent !important;
+}
+
+/* Logo du menu */
+.ea-sidebar .logo {
+    color: #4c1d95 !important;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+/* Liens du menu */
+.ea-sidebar .menu-item .menu-link {
+    color: #5b21b6;
+    border-radius: 12px;
+    margin: 4px 12px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.ea-sidebar .menu-item .menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: translateX(5px);
+}
+
+/* Lien Actif */
+.ea-sidebar .menu-item.active .menu-link {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+.ea-sidebar .menu-item.active .menu-link i {
+    color: white !important;
+}
+
+/* 3. LE HEADER (Barre de recherche en haut) */
+.content-top {
+    background: transparent !important;
+    border-bottom: none !important;
+    padding: 15px 0 !important;
+}
+
+/* 4. LES TABLEAUX (L'espace principal) */
+.datagrid, .content-box {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 10px 40px rgba(124, 58, 237, 0.1) !important;
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* Entêtes des tableaux */
+.datagrid th {
+    background: transparent !important;
+    color: #5b21b6 !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.1) !important;
+    padding: 18px !important;
+}
+
+/* Lignes du tableau */
+.datagrid tbody tr td {
+    background: transparent !important;
+    color: #374151 !important;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.05) !important;
+}
+
+/* Effet 3D au survol d'une ligne */
+.datagrid tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #4c1d95 !important;
+}
+
+/* 5. LES BOUTONS & BADGES */
+.btn-primary {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+    border: none !important;
+    border-radius: 30px !important;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3) !important;
+    font-weight: bold;
+    padding: 8px 24px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5) !important;
+}
+
+/* Switch (Boutons on/off) pour EasyAdmin */
+.form-switch .form-check-input:checked {
+    background-color: #8b5cf6 !important;
+    border-color: #8b5cf6 !important;
+}
+
+/* Titre de la page */
+h1.title {
+    color: #4c1d95 !important;
+    font-weight: 900 !important;
+    font-size: 2rem !important;
+}

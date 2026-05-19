@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Politique des Cookies - Fort Intervention{% endblock %}
+{% block body %}
+    <div class="container py-5" style="max-width: 800px; min-height: 70vh;">
+        <h1 class="fw-bold mb-4">Politique de gestion des Cookies</h1>
+        <p class="text-muted">Dernière mise à jour : {{ 'now'|date('d/m/Y') }}</p>
+
+        <div class="card shadow-sm border-0 rounded-4 p-4 mt-4">
+            <h4 class="fw-bold text-primary">1. Qu'est-ce qu'un cookie ?</h4>
+            <p>Un "cookie" est un petit fichier texte déposé sur votre terminal (ordinateur, tablette, smartphone) lors de la visite d'un site web. Il permet de mémoriser vos actions et préférences (comme la connexion à votre compte) pour faciliter votre navigation.</p>
+
+            <h4 class="fw-bold text-primary mt-4">2. Les cookies que nous utilisons</h4>
+            <ul>
+                <li><strong>Cookies strictement nécessaires :</strong> Indispensables au fonctionnement du site (ex: maintien de votre session connectée, sécurisation des formulaires). Ils ne peuvent pas être désactivés.</li>
+                <li><strong>Cookies de préférences :</strong> Permettent au site de mémoriser vos choix (comme le passage en Mode Nuit).</li>
+            </ul>
+
+            <h4 class="fw-bold text-primary mt-4">3. Durée de conservation</h4>
+            <p>Les cookies de session sont détruits dès que vous fermez votre navigateur. Les cookies de préférences (comme le thème sombre) sont conservés sur votre appareil pour une durée maximale de 13 mois.</p>
+
+            <h4 class="fw-bold text-primary mt-4">4. Gérer vos cookies</h4>
+            <p>Vous pouvez à tout moment configurer votre navigateur pour bloquer les cookies ou être alerté de leur utilisation. Attention : le blocage des cookies nécessaires peut empêcher l'utilisation de votre espace client sur notre site.</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Serrurerie - Fort Intervention{% endblock %}
+
+{% block body %}
+    <style>
+        .hero-serrurerie {
+            position: relative;
+            padding: 100px 0 80px;
+            overflow: hidden;
+            background-color: #1a1d20;
+            color: white;
+        }
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('images/serrurerie-fond.jpeg') }}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            filter: blur(4px);
+            z-index: 1;
+        }
+        .hero-serrurerie::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: var(--bs-body-bg);
+            transform: skewY(-2deg);
+            z-index: 2;
+        }
+        .hero-content { position: relative; z-index: 3; }
+
+        .timeline { position: relative; padding-left: 3rem; margin-bottom: 3rem; }
+        .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 3px; background: rgba(13, 110, 253, 0.2); border-radius: 3px; }
+        .timeline-item { position: relative; margin-bottom: 2.5rem; }
+        .timeline-icon { position: absolute; left: -3rem; width: 26px; height: 26px; background: var(--bs-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 0 0 4px var(--bs-body-bg); }
+
+        /* Correction du background white en dur */
+        .product-card { border: 1px solid var(--bs-border-color); border-radius: 15px; text-align: center; padding: 15px; background: var(--bs-body-bg); transition: box-shadow 0.3s, transform 0.3s; height: 100%; }
+        .product-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1); transform: translateY(-5px); }
+        .product-img { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* Correction du gris en dur */
+        .timeline-img { height: 250px; width: 100%; object-fit: contain; background-color: var(--bs-tertiary-bg); border-radius: 12px; margin-top: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid var(--bs-border-color); }
+
+        /* Correction du fond en dur du container Avant/Après */
+        .ba-container { position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 15px; user-select: none; background-color: var(--bs-body-bg); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid var(--bs-border-color); }
+        .ba-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; pointer-events: none; }
+        .ba-after { z-index: 1; }
+        .ba-before { z-index: 2; width: 100%; height: 100%; border-right: none; clip-path: inset(0 50% 0 0); }
+        .ba-separator { position: absolute; z-index: 3; top: 0; bottom: 0; width: 4px; background: #fff; left: 50%; transform: translateX(-50%); box-shadow: 0 0 15px rgba(0,0,0,0.3); pointer-events: none; }
+        .ba-slider { position: absolute; z-index: 4; top: 0; bottom: 0; left: 50%; width: 60px; margin-left: -30px; cursor: ew-resize; display: flex; align-items: center; justify-content: center; }
+        .ba-handle { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); color: var(--bs-primary); pointer-events: none; transition: transform 0.2s; }
+        .ba-slider:hover .ba-handle { transform: scale(1.1); }
+        .ba-label { position: absolute; bottom: 10px; padding: 4px 12px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: white; border-radius: 20px; font-size: 11px; font-weight: bold; letter-spacing: 1px; z-index: 5; pointer-events: none; }
+        .ba-label-before { left: 10px; }
+        .ba-label-after { right: 10px; }
+    </style>
+
+    <div class="hero-serrurerie text-center">
+        <div class="hero-background"></div>
+        <div class="container hero-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-primary text-white px-3 py-2 mb-3 fs-6">Serrurerie & Blindage</span>
+                    <h1 class="display-3 fw-bold mb-4">Dépannage & Sécurisation</h1>
+                    <p class="lead opacity-75 mb-3">Spécialistes de l'ouverture fine et de la sécurisation après effraction. Nous privilégions toujours la réparation minutieuse à la destruction inutile.</p>
+                    <p class="text-light opacity-50 mb-5" style="font-size: 1.1rem;">
+                        Qu'il s'agisse d'une porte claquée, d'une perte de clés, d'un besoin de blindage ou de l'installation d'une serrure haute sécurité (A2P), nous vous garantissons une intervention rapide, agréée par les assurances.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a href="tel:0326970086" class="btn btn-primary btn-lg rounded-pill px-4 fw-bold shadow-lg d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-phone-volume fa-shake me-2"></i> Urgence : 03 26 97 00 86
+                        </a>
+                        <a href="{{ path('app_planning') }}" class="btn btn-outline-light btn-lg rounded-pill px-4 fw-bold shadow">
+                            <i class="fa-solid fa-calendar me-2"></i> Prendre RDV
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5 mt-4">
+        <div class="row mb-5 pb-4 border-bottom align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4 text-primary">Le métier de la réparation avant tout</h2>
+                <p class="text-muted fs-5">Beaucoup de "dépanneurs" détruisent votre serrure pour vous en facturer une nouvelle hors de prix. <strong>Ce n'est pas notre méthode.</strong></p>
+                <p class="text-muted mb-4">Porte claquée avec les clés à l'intérieur ? Nous utilisons des radios médicales ou des outils de crochetage pour ouvrir votre porte sans faire la moindre rayure, ni casser le cylindre.</p>
+
+                <div class="ratio ratio-16x9 rounded-3 shadow-sm overflow-hidden mb-4 border border-secondary border-opacity-25">
+                    <video class="w-100 h-100 object-fit-cover" controls muted playsinline poster="{{ asset('images/img-video.png') }}">
+                        <source src="{{ asset('images/video-serrurie.mp4') }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <div class="col-lg-5 offset-lg-1 mt-5 mt-lg-0">
+                <h2 class="fw-bold mb-4">Notre protocole suite à une effraction</h2>
+                <div class="timeline mt-3">
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-1"></i></div>
+                        <h5 class="fw-bold">Constat</h5>
+                        <p class="text-muted mb-0">Nous constatons les dégâts sur la porte, le bâti et la serrure pour préparer le devis pour votre assurance.</p>
+                        <img src="{{ asset('images/ia.png') }}" class="timeline-img" alt="Constat">
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-2"></i></div>
+                        <h5 class="fw-bold">Fermeture Provisoire</h5>
+                        <p class="text-muted mb-0">Nous posons un système de fermeture provisoire robuste. Vous êtes en sécurité la nuit même.</p>
+                        <img src="{{ asset('images/portiere-avant.jpeg') }}" class="timeline-img" alt="Porte fracturée">
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-3"></i></div>
+                        <h5 class="fw-bold">Remplacement Définitif</h5>
+                        <p class="text-muted mb-0">Dès validation du devis, nous remplaçons les équipements à l'identique ou posons un blindage.</p>
+                        <img src="{{ asset('images/portiere-apres.jpeg') }}" class="timeline-img" alt="Porte réparée">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-5 border-bottom">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-uppercase">La différence Avant / Après</h2>
+                <div class="bg-primary mx-auto mb-4" style="width: 60px; height: 4px;"></div>
+                <p class="text-muted mx-auto" style="max-width: 800px;">Glissez le curseur pour observer notre travail sur nos derniers chantiers.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                {% for real in realisations %}
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3 bg-body-tertiary">
+                            <div class="ba-container" id="ba-ser-{{ real.id }}">
+                                <div class="ba-image ba-after" style="background-image: url('{{ asset('uploads/realisations/' ~ real.imageAfter) }}');"></div>
+
+                                {% if real.imageBefore %}
+                                    <div class="ba-image ba-before" style="background-image: url('{{ asset('uploads/realisations/' ~ real.imageBefore) }}');"></div>
+                                    <div class="ba-separator"></div>
+                                    <div class="ba-label ba-label-before">AVANT</div>
+                                    <div class="ba-slider"><div class="ba-handle"><i class="fa-solid fa-arrows-left-right"></i></div></div>
+                                {% endif %}
+
+                                <div class="ba-label ba-label-after">APRÈS</div>
+                            </div>
+                        </div>
+                        <h6 class="fw-bold text-center mt-2">{{ real.title }}</h6>
+                        {% if real.description %}
+                            <p class="small text-muted text-center">{{ real.description }}</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="col-12 text-center text-muted">
+                        <p>Nos exemples d'interventions seront bientôt mis en ligne.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="py-5">
+            <h2 class="fw-bold text-center mb-5">Le matériel de Haute Sécurité que nous installons</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-card">
+                        <img src="{{ asset('images/cylindre.webp') }}" alt="Cylindre" class="product-img">
+                        <h6 class="fw-bold">Cylindres Débrayables</h6>
+                        <p class="small text-muted mb-0">Clés incopiables avec carte de propriété.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-card">
+                        <img src="{{ asset('images/serru.webp') }}" alt="Serrure" class="product-img">
+                        <h6 class="fw-bold">Serrures Multipoints</h6>
+                        <p class="small text-muted mb-0">Verrouillage certifié A2P.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-card">
+                        <img src="{{ asset('images/poigne.webp') }}" alt="Poignée" class="product-img">
+                        <h6 class="fw-bold">Poignées Blindées</h6>
+                        <p class="small text-muted mb-0">Protection contre l'arrachement.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-card">
+                        <img src="{{ asset('images/corniere.webp') }}" alt="Cornières" class="product-img">
+                        <h6 class="fw-bold">Cornières Anti-Pinces</h6>
+                        <p class="small text-muted mb-0">Empêche l'usage de pied-de-biche.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('turbo:load', () => {
+            const containers = document.querySelectorAll('.ba-container');
+            containers.forEach(container => {
+                const before = container.querySelector('.ba-before');
+                const separator = container.querySelector('.ba-separator');
+                const slider = container.querySelector('.ba-slider');
+                if(!slider) return;
+
+                let isDragging = false;
+                slider.addEventListener('dragstart', (e) => e.preventDefault());
+
+                const move = (e) => {
+                    if (!isDragging) return;
+                    let rect = container.getBoundingClientRect();
+                    let x = (e.pageX || e.touches[0].pageX) - rect.left;
+                    let percent = (x / rect.width) * 100;
+                    if (percent < 0) percent = 0; if (percent > 100) percent = 100;
+                    before.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+                    separator.style.left = percent + '%'; slider.style.left = percent + '%';
+                };
+
+                slider.onmousedown = (e) => { isDragging = true; e.preventDefault(); };
+                window.addEventListener('mouseup', () => isDragging = false);
+                window.addEventListener('mousemove', move);
+
+                slider.ontouchstart = () => { isDragging = true; };
+                window.addEventListener('touchend', () => isDragging = false);
+                window.addEventListener('touchmove', move);
+            });
+        });
+    </script>
+{% endblock %}

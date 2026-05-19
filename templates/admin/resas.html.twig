@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container py-5">
+        <table class="table shadow-sm">
+            <thead class="table-dark">
+            <tr>
+                <th>Client</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for r in resas %}
+                <tr>
+                    <td>{{ r.client.email }}</td>
+                    <td>{{ r.date|date('d/m/Y H:i') }}</td>
+                    <td>{{ r.endAt|date('H:i') }}</td>
+                    <td>{{ r.status }}</td>
+                    <td>
+                        {% if r.status != 'VALIDE' %}
+                            <a href="{{ path('admin_valider', {id: r.id}) }}" class="btn btn-sm btn-success">Valider</a>
+                        {% endif %}
+                        <a href="{{ path('admin_supprimer', {id: r.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

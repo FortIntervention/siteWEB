@@ -1,0 +1,441 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Menuiserie - Fort Intervention{% endblock %}
+
+{% block body %}
+    <style>
+        /* --- STYLES HERO --- */
+        .hero-menuiserie {
+            position: relative;
+            padding: 100px 0 80px;
+            overflow: hidden;
+            background-color: #1a1d20;
+            color: white;
+        }
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('images/menuiserie.webp') }}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            filter: blur(4px);
+            z-index: 1;
+        }
+        .hero-menuiserie::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: var(--bs-body-bg);
+            transform: skewY(-2deg);
+            z-index: 2;
+        }
+        .hero-content { position: relative; z-index: 3; }
+
+        /* --- AUTRES SECTIONS --- */
+        .feature-icon-box { width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center; border-radius: 16px; background: rgba(var(--bs-primary-rgb), 0.1); color: var(--bs-primary); font-size: 28px; margin-bottom: 1.5rem; transition: transform 0.3s ease; }
+        .feature-icon-box:hover { transform: scale(1.1) rotate(-5deg); }
+
+        .carousel-img-custom { height: 450px; object-fit: cover; border-radius: 15px; }
+        .carousel-shadow { box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        [data-bs-theme="dark"] .carousel-shadow { box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+
+        /* --- SECTION A À Z (ÉTAPES) --- */
+        .step-card { border: 1px solid var(--bs-border-color); background: var(--bs-body-bg); border-radius: 15px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; height: 100%; }
+        .step-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .step-img-wrap { position: relative; overflow: hidden; }
+        .step-img-wrap img { width: 100%; height: 200px; object-fit: cover; transition: transform 0.5s ease; }
+        .step-card:hover .step-img-wrap img { transform: scale(1.05); }
+        .step-badge { position: absolute; top: 15px; left: 15px; background: var(--bs-primary); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 2; }
+
+        /* --- DÉFILEMENT AUTOMATIQUE (MARQUEE) POUR LA GALERIE --- */
+        .marquee-wrapper { display: flex; overflow: hidden; width: 100%; padding: 20px 0; }
+        .marquee-content { display: flex; animation: scrollMarquee 30s linear infinite; }
+        .marquee-content:hover { animation-play-state: paused; }
+        @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .gallery-item-marquee { width: 350px; height: 280px; margin: 0 15px; border-radius: 15px; overflow: hidden; position: relative; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .gallery-item-marquee img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .gallery-item-marquee:hover img { transform: scale(1.1); }
+        .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 30px 20px 20px; color: white; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; transform: translateY(10px); }
+        .gallery-item-marquee:hover .gallery-overlay { opacity: 1; transform: translateY(0); }
+
+        /* --- SLIDER AVANT / APRÈS --- */
+        /* Images en mode 'contain' et fond 'tertiary' pour ne pas zoomer ou couper les photos */
+        .ba-container { position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 15px; user-select: none; background-color: var(--bs-tertiary-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--bs-border-color); }
+        .ba-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; pointer-events: none; }
+        .ba-after { z-index: 1; filter: contrast(1.05); }
+        .ba-before { z-index: 2; width: 100%; height: 100%; border-right: none; clip-path: inset(0 50% 0 0); }
+        .ba-separator { position: absolute; z-index: 3; top: 0; bottom: 0; width: 4px; background: #fff; left: 50%; transform: translateX(-50%); box-shadow: 0 0 15px rgba(0,0,0,0.5); pointer-events: none; }
+        .ba-slider { position: absolute; z-index: 4; top: 0; bottom: 0; left: 50%; width: 60px; margin-left: -30px; cursor: ew-resize; display: flex; align-items: center; justify-content: center; }
+        .ba-handle { width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); color: var(--bs-primary); pointer-events: none; transition: transform 0.2s, box-shadow 0.2s; border: 2px solid var(--bs-primary); font-size: 1.2rem; }
+        .ba-slider:hover .ba-handle { transform: scale(1.15); box-shadow: 0 6px 25px rgba(0,0,0,0.4); }
+        .ba-label { position: absolute; bottom: 15px; padding: 6px 18px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: white; border-radius: 30px; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; z-index: 5; pointer-events: none; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.2); }
+        .ba-label-before { left: 15px; }
+        .ba-label-after { right: 15px; }
+
+        .hover-lift { transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; border-radius: 15px; }
+        .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); z-index: 2; position: relative; }
+    </style>
+
+    {# --- HERO SECTION CENTRÉE --- #}
+    <div class="hero-menuiserie text-center">
+        <div class="hero-background"></div>
+        <div class="container hero-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-primary text-white px-3 py-2 mb-3 fs-6">Expertise Artisanale</span>
+                    <h1 class="display-3 fw-bold mb-4">Le Sur-Mesure <span class="text-primary">Exigeant</span></h1>
+                    <p class="lead opacity-75 mb-3">Découvrez notre savoir-faire en menuiserie et fermetures. De l'installation de fenêtres haute isolation à la réparation minutieuse de vos boiseries existantes.</p>
+                    <p class="text-light opacity-50 mb-5" style="font-size: 1.1rem;">
+                        Nous garantissons un travail soigné, durable et adapté à votre habitat. Dressings, bibliothèques, escaliers, ou encore fenêtres et portes sur-mesure pour sublimer et isoler votre intérieur.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a href="{{ path('app_planning') }}" class="btn btn-primary btn-lg rounded-pill px-4 fw-bold shadow-lg d-flex align-items-center justify-content-center">
+                            <i class="fa-regular fa-calendar-check me-2"></i> Demander un devis
+                        </a>
+                        <a href="#realisations" class="btn btn-outline-light btn-lg rounded-pill px-4 fw-bold shadow">
+                            Voir nos chantiers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- SECTION VIDÉO DE PRÉSENTATION --- #}
+    <div class="container py-5 mt-3">
+        <div class="row justify-content-center border-bottom pb-5">
+            <div class="col-lg-9 text-center">
+                <span class="text-primary fw-bold text-uppercase tracking-wide small">En action</span>
+                <h2 class="fw-bold mb-4">Notre savoir-faire en vidéo</h2>
+                <p class="text-muted mb-5 mx-auto" style="max-width: 700px;">
+                    Découvrez la précision de notre travail, la qualité de nos matériaux et notre passion pour le bois à travers cette courte présentation.
+                </p>
+
+                <div class="ratio ratio-16x9 rounded-4 shadow-lg overflow-hidden border border-secondary border-opacity-25 hover-lift">
+                    <video class="w-100 h-100 object-fit-cover"
+                           controls
+                           autoplay
+                           loop
+                           muted
+                           playsinline
+                           poster="{{ asset('images/menuiserie.webp') }}"
+                           preload="auto">
+                        <source src="{{ asset('videos/menuiserie.mp4') }}" type="video/mp4">
+                        <source src="{{ asset('videos/menuiserie.MOV') }}" type="video/quicktime">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- NOUVELLE SECTION : DE A À Z --- #}
+    <div class="bg-body-tertiary py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <span class="text-primary fw-bold text-uppercase tracking-wide small">Méthode d'intervention</span>
+                <h2 class="fw-bold display-6 mb-3">Un accompagnement de A à Z</h2>
+                <p class="text-muted mx-auto" style="max-width: 700px;">
+                    Nous ne sous-traitons rien. De la première prise de cotes jusqu'au dernier coup de balai, nous gérons votre projet dans son intégralité pour vous garantir un résultat impeccable.
+                </p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                {# Étape 1 #}
+                <div class="col-md-6 col-lg-3">
+                    <div class="step-card">
+                        <div class="step-img-wrap">
+                            <div class="step-badge">1</div>
+                            <img src="{{ asset('images/construction.JPG') }}" alt="Consultation">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold mb-2">Conseil & Devis</h5>
+                            <p class="text-muted small mb-0">Nous étudions votre projet sur place, prenons des cotes précises et vous proposons les meilleures essences de bois et matériaux.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Étape 2 #}
+                <div class="col-md-6 col-lg-3">
+                    <div class="step-card">
+                        <div class="step-img-wrap">
+                            <div class="step-badge">2</div>
+                            <img src="{{ asset('images/porte-travail-men.JPG') }}" alt="Fabrication">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold mb-2">Fabrication & Commande</h5>
+                            <p class="text-muted small mb-0">Découpe, assemblage et traitement réalisés sur-mesure. Nous ne travaillons qu'avec des fournisseurs locaux certifiés.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Étape 3 #}
+                <div class="col-md-6 col-lg-3">
+                    <div class="step-card">
+                        <div class="step-img-wrap">
+                            <div class="step-badge">3</div>
+                            <img src="{{ asset('images/porte-serrure.JPG') }}" alt="Installation">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold mb-2">Pose & Installation</h5>
+                            <p class="text-muted small mb-0">Nos artisans posent vos menuiseries dans les règles de l'art (DTU), en protégeant vos sols et votre mobilier existant.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Étape 4 #}
+                <div class="col-md-6 col-lg-3">
+                    <div class="step-card">
+                        <div class="step-img-wrap">
+                            <div class="step-badge">4</div>
+                            <img src="{{ asset('images/porte-fin.JPG') }}" alt="Finitions">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold mb-2">Finitions & Propreté</h5>
+                            <p class="text-muted small mb-0">Ajustements finaux, joints parfaits et nettoyage de la zone de chantier. Nous vous laissons un espace prêt à vivre.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- SECTION: FENÊTRES & PORTES --- #}
+    <div class="container py-5 mt-4">
+        <div class="row align-items-center g-5 border-bottom pb-5">
+            <div class="col-lg-5 order-2 order-lg-1">
+                <div class="feature-icon-box shadow-sm">
+                    <i class="fa-solid fa-door-open"></i>
+                </div>
+                <h2 class="fw-bold mb-4 display-6">Fenêtres & Portes d'entrée</h2>
+                <p class="text-muted fs-5 mb-4">
+                    Vos menuiseries extérieures sont la première ligne de défense contre le froid et les intrusions. Nous installons des profilés dernière génération (Bois, Alu, PVC) avec double ou triple vitrage.
+                </p>
+                <ul class="list-unstyled mt-4 text-muted fs-6">
+                    <li class="mb-3 d-flex align-items-center bg-body-tertiary p-3 rounded-3 shadow-sm">
+                        <i class="fa-solid fa-circle-check text-primary fs-4 me-3"></i>
+                        <span>Remplacement en rénovation ou pose à neuf</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center bg-body-tertiary p-3 rounded-3 shadow-sm">
+                        <i class="fa-solid fa-circle-check text-primary fs-4 me-3"></i>
+                        <span>Ajustement parfait des ouvrants et dormants</span>
+                    </li>
+                    <li class="d-flex align-items-center bg-body-tertiary p-3 rounded-3 shadow-sm">
+                        <i class="fa-solid fa-circle-check text-primary fs-4 me-3"></i>
+                        <span>Isolation thermique et phonique renforcée</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6 offset-lg-1 order-1 order-lg-2">
+                <div id="carouselFenetres" class="carousel slide carousel-shadow rounded-4 overflow-hidden border border-secondary border-opacity-10 hover-lift" data-bs-ride="carousel" data-bs-interval="3000">
+                    <div class="carousel-indicators mb-2">
+                        <button type="button" data-bs-target="#carouselFenetres" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselFenetres" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselFenetres" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="{{ asset('images/fenetre_galerie1.webp') }}" class="d-block w-100 carousel-img-custom" alt="Pose Fenêtre">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="{{ asset('images/fenetre-coulissante-apres.jpeg') }}" class="d-block w-100 carousel-img-custom" alt="Baie Coulissante">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="{{ asset('images/portiere-fin.jpeg') }}" class="d-block w-100 carousel-img-custom" alt="Porte Entrée">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselFenetres" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark bg-opacity-75 rounded-circle p-3" aria-hidden="true"></span>
+                        <span class="visually-hidden">Précédent</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselFenetres" data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-dark bg-opacity-75 rounded-circle p-3" aria-hidden="true"></span>
+                        <span class="visually-hidden">Suivant</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- SECTION : GALERIE PORTFOLIO EN DÉFILEMENT CONTINU --- #}
+    <div id="realisations" class="py-5 overflow-hidden">
+        <div class="container text-center mb-4">
+            <span class="text-primary fw-bold text-uppercase tracking-wide small">Portfolio</span>
+            <h2 class="fw-bold display-6 mb-3">Nos Réalisations Sur-Mesure</h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Parcourez nos derniers chantiers. Chaque projet est unique : dressings, bibliothèques, escaliers et aménagements optimisés pour votre espace.
+            </p>
+        </div>
+
+        <div class="marquee-wrapper">
+            <div class="marquee-content">
+                {# --- BLOC 1 --- #}
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet1.jpeg') }}" alt="Dressing Sur-Mesure">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Dressing Sur-Mesure</h5>
+                        <p class="mb-0 small opacity-75">Aménagement intérieur</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet2.jpeg') }}" alt="Pose Parquet Massif">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Pose Parquet Massif</h5>
+                        <p class="mb-0 small opacity-75">Revêtement de sol</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet3.jpeg') }}" alt="Bibliothèque Salon">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Bibliothèque Salon</h5>
+                        <p class="mb-0 small opacity-75">Mobilier intégré</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet4.jpeg') }}" alt="Rénovation Escalier Bois">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Rénovation Escalier Bois</h5>
+                        <p class="mb-0 small opacity-75">Restauration complète</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet5.jpeg') }}" alt="Création Verrière">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Création Verrière</h5>
+                        <p class="mb-0 small opacity-75">Séparation d'espaces</p>
+                    </div>
+                </div>
+
+                {# --- BLOC 2 (POUR LA BOUCLE INFINIE) --- #}
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet1.jpeg') }}" alt="Dressing Sur-Mesure">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Dressing Sur-Mesure</h5>
+                        <p class="mb-0 small opacity-75">Aménagement intérieur</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet2.jpeg') }}" alt="Pose Parquet Massif">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Pose Parquet Massif</h5>
+                        <p class="mb-0 small opacity-75">Revêtement de sol</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet3.jpeg') }}" alt="Bibliothèque Salon">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Bibliothèque Salon</h5>
+                        <p class="mb-0 small opacity-75">Mobilier intégré</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet4.jpeg') }}" alt="Rénovation Escalier Bois">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Rénovation Escalier Bois</h5>
+                        <p class="mb-0 small opacity-75">Restauration complète</p>
+                    </div>
+                </div>
+                <div class="gallery-item-marquee">
+                    <img src="{{ asset('images/menuiserie-projet5.jpeg') }}" alt="Création Verrière">
+                    <div class="gallery-overlay">
+                        <h5 class="mb-1 fw-bold">Création Verrière</h5>
+                        <p class="mb-0 small opacity-75">Séparation d'espaces</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- SECTION : AVANT / APRÈS (AVEC BOUCLE EASYADMIN) --- #}
+    <div class="bg-body-tertiary py-5 border-top">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <div class="feature-icon-box shadow-sm mb-3" style="width: 50px; height: 50px; font-size: 20px;">
+                    <i class="fa-solid fa-hammer"></i>
+                </div>
+                <h2 class="fw-bold display-6 mb-3">L'Atelier : Rénovation & Réparation</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Glissez le curseur pour découvrir la transformation de nos chantiers de restauration.</p>
+            </div>
+
+            <div class="row g-5 justify-content-center">
+                {% for real in realisations %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body hover-lift">
+                            <div class="ba-container" id="ba-men-{{ real.id }}">
+                                <div class="ba-image ba-after" style="background-image: url('{{ asset('uploads/realisations/' ~ real.imageAfter) }}');"></div>
+
+                                {% if real.imageBefore %}
+                                    <div class="ba-image ba-before" style="background-image: url('{{ asset('uploads/realisations/' ~ real.imageBefore) }}');"></div>
+                                    <div class="ba-separator"></div>
+                                    <div class="ba-label ba-label-before">AVANT</div>
+                                    <div class="ba-slider"><div class="ba-handle"><i class="fa-solid fa-arrows-left-right"></i></div></div>
+                                {% endif %}
+
+                                <div class="ba-label ba-label-after">APRÈS</div>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold text-center mt-4">{{ real.title }}</h5>
+                        {% if real.description %}
+                            <p class="small text-muted text-center">{{ real.description }}</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="col-12 text-center text-muted">
+                        <p>Aucune réalisation ajoutée pour la catégorie Menuiserie.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-5 pt-4">
+                <a href="{{ path('app_planning') }}" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow-lg hover-lift d-inline-flex align-items-center">
+                    Planifier mon intervention <i class="fa-solid fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('turbo:load', () => {
+            const containers = document.querySelectorAll('.ba-container');
+            containers.forEach(container => {
+                const before = container.querySelector('.ba-before');
+                const separator = container.querySelector('.ba-separator');
+                const slider = container.querySelector('.ba-slider');
+
+                if(!slider) return;
+                let isDragging = false;
+
+                slider.addEventListener('dragstart', (e) => e.preventDefault());
+
+                const move = (e) => {
+                    if (!isDragging) return;
+                    let rect = container.getBoundingClientRect();
+                    let x = (e.pageX || e.touches[0].pageX) - rect.left;
+                    let percent = (x / rect.width) * 100;
+
+                    if (percent < 0) percent = 0;
+                    if (percent > 100) percent = 100;
+
+                    before.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+                    separator.style.left = percent + '%';
+                    slider.style.left = percent + '%';
+                };
+
+                slider.onmousedown = (e) => { isDragging = true; e.preventDefault(); };
+                window.addEventListener('mouseup', () => isDragging = false);
+                window.addEventListener('mousemove', move);
+
+                slider.ontouchstart = () => { isDragging = true; };
+                window.addEventListener('touchend', () => isDragging = false);
+                window.addEventListener('touchmove', move);
+            });
+        });
+    </script>
+{% endblock %}

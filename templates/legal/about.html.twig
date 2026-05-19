@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos de nous - Fort Intervention{% endblock %}
+
+{% block body %}
+    <style>
+        /* --- STYLES HERO --- */
+        .hero-about {
+            position: relative;
+            padding: 100px 0 80px;
+            overflow: hidden;
+            background-color: #1a1d20;
+            color: white;
+        }
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Tu peux mettre l'image de ton choix en fond ici, ou garder un fond sombre classique */
+            background-image: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background-size: cover;
+            background-position: center;
+            opacity: 0.9;
+            z-index: 1;
+        }
+        .hero-about::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: var(--bs-body-bg);
+            transform: skewY(-2deg);
+            z-index: 2;
+        }
+        .hero-content { position: relative; z-index: 3; }
+
+        /* --- STYLES DES CARTES & IMAGES --- */
+        .hover-lift { transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); z-index: 2; position: relative; }
+
+        .value-card { border: 1px solid var(--bs-border-color); background: var(--bs-body-bg); border-radius: 20px; transition: all 0.3s ease; height: 100%; padding: 40px 30px; text-align: center; }
+        .value-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); border-color: rgba(13, 110, 253, 0.3); }
+        .value-icon { width: 80px; height: 80px; background: rgba(13, 110, 253, 0.1); color: var(--bs-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 25px; transition: transform 0.3s ease; }
+        .value-card:hover .value-icon { transform: scale(1.1) rotate(5deg); background: var(--bs-primary); color: white; }
+
+        .truck-image-wrapper { position: relative; border-radius: 20px; padding: 15px; background: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color); }
+        .truck-image { width: 100%; height: auto; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .badge-experience { position: absolute; bottom: -20px; right: -20px; background: var(--bs-primary); color: white; width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 10px 20px rgba(13, 110, 253, 0.4); z-index: 4; border: 4px solid var(--bs-body-bg); }
+        .badge-experience span.number { font-size: 2.2rem; line-height: 1; }
+        .badge-experience span.text { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+
+    {# --- HERO SECTION --- #}
+    <div class="hero-about text-center">
+        <div class="hero-background"></div>
+        <div class="container hero-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-primary text-white px-3 py-2 mb-3 fs-6">À propos de nous</span>
+                    <h1 class="display-3 fw-bold mb-4">Fort Intervention</h1>
+                    <p class="lead opacity-75 mb-0 px-lg-4">Votre partenaire de confiance dans le Grand Est pour tous vos besoins urgents et vos projets de rénovation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- SECTION HISTOIRE & CAMION --- #}
+    <div class="container py-5 mt-4">
+        <div class="row align-items-center g-5 pb-5">
+            <div class="col-lg-6 order-2 order-lg-1">
+                <span class="text-primary fw-bold text-uppercase tracking-wide small mb-2 d-block">Notre Histoire</span>
+                <h2 class="display-6 fw-bold mb-4">Une entreprise avant tout <span class="text-primary">familiale</span></h2>
+
+                <p class="fs-5 text-muted mb-4">
+                    Fondée sur des valeurs de proximité et de savoir-faire artisanal, Fort Intervention est bien plus qu'une simple entreprise de dépannage. C'est une histoire de passion transmise avec exigence.
+                </p>
+                <p class="text-muted mb-4">
+                    Contrairement aux plateformes impersonnelles, nous mettons un point d'honneur à connaître nos clients et à assurer un suivi irréprochable de nos chantiers. Quand vous nous appelez, c'est un artisan local, investi et qualifié qui intervient chez vous.
+                </p>
+
+                <div class="d-flex align-items-center mt-5 bg-body-tertiary p-3 rounded-4 border border-secondary border-opacity-10">
+                    <i class="fa-solid fa-truck-fast text-primary fs-2 me-4 ms-2"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Un atelier mobile tout équipé</h6>
+                        <p class="mb-0 small text-muted">Notre camion est équipé de tout le matériel nécessaire pour intervenir instantanément et régler 90% des urgences dès le premier passage.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 order-1 order-lg-2">
+                <div class="truck-image-wrapper hover-lift">
+                    <img src="{{ asset('images/voiture.jpeg') }}" alt="Camion Fort Intervention" class="truck-image">
+
+                    <div class="badge-experience">
+                        <span class="number">24/7</span>
+                        <span class="text mt-1">Disponibilité</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- SECTION VALEURS --- #}
+    <div class="bg-body-tertiary py-5 border-top">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold display-6 mb-3">Nos valeurs fondamentales</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Ce qui fait notre force et la fidélité de nos clients jour après jour.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                {# Valeur 1 : Urgence #}
+                <div class="col-md-6 col-lg-4">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <h4 class="fw-bold mb-3">Réactivité & Urgence</h4>
+                        <p class="text-muted small mb-0">Nous savons qu'une porte claquée ou une fuite d'eau ne prévient pas. C'est pourquoi nous sommes organisés pour intervenir en moins de 30 minutes sur notre secteur.</p>
+                    </div>
+                </div>
+
+                {# Valeur 2 : Honnêteté #}
+                <div class="col-md-6 col-lg-4">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                        <h4 class="fw-bold mb-3">Honnêteté & Transparence</h4>
+                        <p class="text-muted small mb-0">Notre réputation se construit sur la confiance. Nous privilégions toujours la réparation à la casse, et nos devis sont détaillés, clairs et validés avant toute action.</p>
+                    </div>
+                </div>
+
+                {# Valeur 3 : Qualité #}
+                <div class="col-md-6 col-lg-4">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fa-solid fa-medal"></i></div>
+                        <h4 class="fw-bold mb-3">Qualité Artisanale</h4>
+                        <p class="text-muted small mb-0">Pas de solutions temporaires ou de réparations bâclées. Nous utilisons des matériaux professionnels agréés (normes A2P, DTU) pour des résultats durables.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 pt-4">
+                <p class="mb-4 fs-5 fw-medium">Un projet en tête ou une urgence à régler ?</p>
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                    <a href="tel:0326970086" class="btn btn-outline-primary btn-lg rounded-pill px-4 fw-bold shadow-sm bg-body">
+                        <i class="fa-solid fa-phone me-2"></i> Nous appeler
+                    </a>
+                    <a href="{{ path('app_planning') }}" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold shadow-lg hover-lift">
+                        Prendre rendez-vous <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planning - Fort Intervention{% endblock %}
+
+{% block body %}
+    <style>
+        [data-bs-theme="dark"] .fc {
+            --fc-page-bg-color: var(--bs-body-bg) !important;
+            --fc-neutral-bg-color: #212529 !important;
+            --fc-neutral-text-color: #f8f9fa !important;
+            --fc-border-color: rgba(255, 255, 255, 0.15) !important;
+            --fc-button-text-color: #f8f9fa !important;
+            --fc-button-bg-color: #343a40 !important;
+            --fc-button-border-color: #495057 !important;
+            --fc-button-hover-bg-color: #495057 !important;
+            --fc-button-hover-border-color: #6c757d !important;
+            --fc-button-active-bg-color: #6c757d !important;
+            --fc-button-active-border-color: #adb5bd !important;
+            --fc-today-bg-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        [data-bs-theme="dark"] .fc a,
+        [data-bs-theme="dark"] .fc .fc-col-header-cell-cushion,
+        [data-bs-theme="dark"] .fc .fc-timegrid-slot-label-cushion {
+            color: #f8f9fa !important;
+            text-decoration: none;
+        }
+
+        .fc-event {
+            border: none !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+        }
+        .fc-event-main {
+            font-weight: 600;
+            padding: 2px 4px;
+        }
+    </style>
+
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="fw-bold text-primary mb-3"><i class="fa-solid fa-calendar-check me-2"></i>Réservez votre intervention</h1>
+                <p class="text-muted lead mb-4">Sélectionnez un créneau disponible dans le calendrier ou faites une demande libre.</p>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" onclick="openManualReservation()">
+                        <i class="fa-solid fa-plus me-2"></i>Demander une intervention
+                    </button>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <form action="{{ path('admin_demandes_reset') }}" method="POST" onsubmit="return confirm('Attention : Cela va supprimer TOUTES les interventions de la base de données du site. Êtes-vous sûr ?');">
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">
+                                Réinitialiser le planning
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success shadow-sm rounded-4 mb-4"><i class="fa-solid fa-check-circle me-2"></i>{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger shadow-sm rounded-4 mb-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ message }}</div>
+        {% endfor %}
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3 small text-muted">
+                            <span class="badge bg-danger me-2" style="width: 15px; height: 15px; display: inline-block;"></span> = Créneau réservé
+                            <span class="badge bg-warning text-dark mx-2" style="width: 15px; height: 15px; display: inline-block;"></span> = En attente
+                            <span class="badge bg-success mx-2" style="width: 15px; height: 15px; display: inline-block;"></span> = Validé
+                        </div>
+                        <div id="calendar" style="min-height: 600px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reservationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="fw-bold text-primary"><i class="fa-solid fa-clipboard-list me-2"></i>Nouvelle Demande</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ path('app_planning') }}" method="POST">
+                    <div class="modal-body p-4">
+
+                        <div id="autoDateBlock" class="alert alert-light border rounded-3 mb-4 text-center">
+                            <i class="fa-solid fa-clock text-primary me-2"></i> Date sélectionnée : <br>
+                            <strong id="displayDate" class="fs-5"></strong>
+                        </div>
+
+                        <div id="manualDateBlock" class="row g-2 mb-4" style="display: none;">
+                            <div class="col-7">
+                                <label class="small fw-bold text-muted mb-1">Date souhaitée <span class="text-danger">*</span></label>
+                                <input type="date" name="date" id="manualDateInput" class="form-control rounded-3">
+                            </div>
+                            <div class="col-5">
+                                <label class="small fw-bold text-muted mb-1">Heure <span class="text-danger">*</span></label>
+                                <input type="time" name="time" id="manualTimeInput" class="form-control rounded-3">
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="hidden_date" id="inputDate">
+                        <input type="hidden" name="hidden_time" id="inputTime">
+
+                        <div class="mb-3">
+                            <label class="fw-bold small text-muted mb-1">Type d'intervention <span class="text-danger">*</span></label>
+                            <select name="serviceType" class="form-select rounded-3" required>
+                                <option value="" disabled selected>Choisir une prestation...</option>
+                                <option value="Serrurerie">Serrurerie</option>
+                                <option value="Plomberie">Plomberie</option>
+                                <option value="Vitrerie">Vitrerie</option>
+                                <option value="Menuiserie">Menuiserie</option>
+                                <option value="Dépannage Standard">Dépannage Standard</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold small text-muted mb-1">Titre (Ex: Fuite sous évier) <span class="text-danger">*</span></label>
+                            <input type="text" name="title" class="form-control rounded-3" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold small text-muted mb-1">Adresse complète de l'intervention <span class="text-danger">*</span></label>
+                            <input type="text" name="address" class="form-control rounded-3" placeholder="Ex: 26 Rue Lecointre, 51100 Reims" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold small text-muted mb-1">Description détaillée</label>
+                            <textarea name="description" class="form-control rounded-3" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0 px-4 pb-4">
+                        {% if app.user %}
+                            <button type="submit" class="btn btn-primary w-100 fw-bold rounded-pill py-2 shadow-sm">Confirmer la demande</button>
+                        {% else %}
+                            <div class="alert alert-warning w-100 text-center rounded-3 mb-0">
+                                <i class="fa-solid fa-lock me-2"></i> Vous devez être <a href="{{ path('app_login') }}" class="fw-bold">connecté</a> pour réserver.
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openManualReservation() {
+            document.getElementById('manualDateBlock').style.display = 'flex';
+            document.getElementById('manualDateInput').required = true;
+            document.getElementById('manualTimeInput').required = true;
+            document.getElementById('autoDateBlock').style.display = 'none';
+            document.getElementById('inputDate').value = '';
+            document.getElementById('inputTime').value = '';
+
+            var myModal = new bootstrap.Modal(document.getElementById('reservationModal'));
+            myModal.show();
+        }
+
+        document.addEventListener('turbo:load', function() {
+            var calendarEl = document.getElementById('calendar');
+            if (!calendarEl) return;
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+
+                locale: 'fr',
+                buttonText: {
+                    today: "Aujourd'hui",
+                    month: 'Mois',
+                    week: 'Semaine',
+                    day: 'Jour',
+                    list: 'Liste'
+                },
+
+                slotMinTime: '08:00:00',
+                slotMaxTime: '20:00:00',
+                allDaySlot: false,
+                slotEventOverlap: false,
+
+                selectable: true,
+                selectMirror: true,
+                selectOverlap: true, // Autorise le clic même sur un créneau occupé !
+
+                select: function(info) {
+                    document.getElementById('manualDateBlock').style.display = 'none';
+                    document.getElementById('manualDateInput').required = false;
+                    document.getElementById('manualTimeInput').required = false;
+                    document.getElementById('autoDateBlock').style.display = 'block';
+
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' };
+                    const formattedDate = info.start.toLocaleDateString('fr-FR', options);
+
+                    document.getElementById('displayDate').innerHTML = formattedDate;
+                    document.getElementById('inputDate').value = info.startStr.split('T')[0];
+                    document.getElementById('inputTime').value = info.start.toTimeString().split(' ')[0].substring(0, 5);
+
+                    var myModal = new bootstrap.Modal(document.getElementById('reservationModal'));
+                    myModal.show();
+                    calendar.unselect();
+                },
+
+                events: {{ events|raw }}
+            });
+
+            calendar.render();
+        });
+    </script>
+{% endblock %}

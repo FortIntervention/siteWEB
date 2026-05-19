@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions Légales - Fort Intervention{% endblock %}
+
+{% block body %}
+    <div class="bg-dark text-white py-5 text-center">
+        <div class="container py-3">
+            <h1 class="display-5 fw-bold mb-0">Mentions Légales & Confidentialité</h1>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                {# --- BOUTON RETOUR MAGIQUE --- #}
+                <div class="mb-4">
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm hover-lift bg-body">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Retour
+                    </a>
+                </div>
+
+                {# 1. ÉDITEUR #}
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-body-tertiary">
+                    <h3 class="fw-bold text-primary mb-4"><i class="fa-solid fa-building me-2"></i> 1. Éditeur du site</h3>
+                    <p>Le présent site est édité par la société :</p>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><strong>Raison sociale :</strong> FORT INTERVENTION DEPANNAGE</li>
+                        <li class="mb-2"><strong>Siège social :</strong> 26 rue Lecointre, 51100 Reims</li>
+                        <li class="mb-2"><strong>RCS Reims :</strong> 894 862 739 00048</li>
+                        <li class="mb-2"><strong>Téléphone :</strong> 09 74 56 60 10</li>
+                        <li class="mb-2"><strong>Email :</strong> fort.intervention@gmail.com</li>
+                    </ul>
+
+                    <h5 class="fw-bold mt-4 mb-3">Directeur de la publication</h5>
+                    <p class="text-muted">FORT JULIAN</p>
+                </div>
+
+                {# 2. HÉBERGEMENT #}
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-body-tertiary">
+                    <h3 class="fw-bold text-primary mb-4"><i class="fa-solid fa-server me-2"></i> 2. Hébergement</h3>
+                    <p class="text-muted mb-2">Le site est hébergé par :</p>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><strong>Nom de l'hébergeur :</strong> [Indiquez le nom, ex: o2switch]</li>
+                        <li class="mb-2"><strong>Raison sociale :</strong> [Ex: Chem. des Pardiaux, 63000 Clermont-Ferrand]</li>
+                        <li class="mb-2"><strong>Téléphone :</strong> [Indiquez le téléphone de l'hébergeur]</li>
+                    </ul>
+                    <div class="alert alert-info py-2 small mt-3 border-0 shadow-sm">
+                        <i class="fa-solid fa-info-circle me-2"></i> Note : Pense à mettre à jour ces infos une fois ton abonnement d'hébergement payé.
+                    </div>
+                </div>
+
+                {# 3. RGPD #}
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-body-tertiary">
+                    <h3 class="fw-bold text-primary mb-4"><i class="fa-solid fa-shield-halved me-2"></i> 3. Protection des données (RGPD)</h3>
+                    <p class="text-muted">Conformément à la loi "Informatique et Libertés" du 6 janvier 1978, vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant.</p>
+
+                    <h6 class="fw-bold mt-4">Collecte des données</h6>
+                    <p class="text-muted small">Les informations recueillies via les formulaires de réservation (Nom, Prénom, Email, Téléphone) sont destinées exclusivement à FORT INTERVENTION DEPANNAGE pour la gestion de vos demandes et la prise de rendez-vous.</p>
+
+                    <h6 class="fw-bold mt-4">Cookies</h6>
+                    <p class="text-muted small mb-0">Les cookies utilisés sur ce site servent uniquement à l'amélioration de l'expérience utilisateur (mémorisation du thème sombre/clair) et aux statistiques. Ils sont conservés pour une durée maximale de 6 mois.</p>
+                </div>
+
+                {# 4. DÉMARCHAGE #}
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-body-tertiary">
+                    <h3 class="fw-bold text-primary mb-4"><i class="fa-solid fa-phone-slash me-2"></i> 4. Opposition au démarchage</h3>
+                    <p class="text-muted small">Conformément à l'article L.223-2 du code de la consommation, vous avez la possibilité de vous inscrire gratuitement sur la liste d'opposition au démarchage téléphonique sur le site <a href="https://www.bloctel.gouv.fr" target="_blank" class="fw-bold">bloctel.gouv.fr</a>.</p>
+                </div>
+
+                {# 5. PROPRIÉTÉ #}
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-body-tertiary">
+                    <h3 class="fw-bold text-primary mb-4"><i class="fa-solid fa-copyright me-2"></i> 5. Propriété intellectuelle</h3>
+                    <p class="text-muted small mb-0">L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés à FORT INTERVENTION DEPANNAGE.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

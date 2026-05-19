@@ -1,0 +1,12 @@
+<h1>Bonjour {{ res.client.firstName }},</h1>
+
+<p>Il y a du nouveau pour votre demande d'intervention de <strong>{{ res.serviceType }}</strong>.</p>
+
+<p>Nouveau statut : <strong>{{ statusLabel }}</strong></p>
+
+<p>Détails du rendez-vous :<br>
+    📅 Date : {{ res.date|date('d/m/Y') }}<br>
+    ⏰ Heure : {{ res.date|date('H:i') }}<br>
+    📍 Adresse : {{ res.interventionAddress }}</p>
+
+<p>À bientôt,<br>L'équipe Fort Intervention</p>

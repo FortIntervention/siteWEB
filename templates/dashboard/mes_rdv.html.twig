@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Rendez-vous - Fort Intervention{% endblock %}
+
+{% block body %}
+    <div class="container py-4 pb-5">
+
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="fw-bold text-primary mb-0"><i class="fa-solid fa-calendar-check me-2"></i>Mes Interventions</h2>
+        </div>
+
+        {% for m in app.flashes('success') %}
+            <div class="alert alert-success rounded-3 shadow-sm"><i class="fa-solid fa-check-circle me-2"></i> {{ m }}</div>
+        {% endfor %}
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card shadow-sm border-0 rounded-4 p-3 h-100 bg-body-tertiary">
+                    <h5 class="fw-bold mb-3 text-muted"><i class="fa-solid fa-calendar-day me-2"></i>Mon Planning</h5>
+                    <div id="personal-calendar" class="bg-body p-2 rounded border" style="min-height: 500px;"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 rounded-4 p-4 h-100 bg-body-tertiary">
+                    <h5 class="fw-bold mb-4 text-muted"><i class="fa-solid fa-list me-2"></i>Historique et Actions</h5>
+
+                    <div class="d-flex flex-column gap-3" style="max-height: 600px; overflow-y: auto;">
+                        {% for d in demandes %}
+
+                            <div class="card border-0 shadow-sm rounded-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="fw-bold mb-0">{{ d.serviceType }}</h6>
+                                        {% if d.status == 'VALIDE' or d.status == 'VALIDE_LU' %}
+                                            <span class="badge bg-success">Confirmé</span>
+                                        {% elseif d.status == 'EN_ATTENTE' %}
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        {% elseif d.status == 'DEMANDE_DEPLACEMENT' or d.status == 'PROPOSITION_CHANGEMENT' %}
+                                            <span class="badge bg-info text-dark">Modification en cours</span>
+                                        {% elseif d.status == 'REFUSE' or d.status == 'REFUSE_LU' or d.status == 'ANNULE' %}
+                                            <span class="badge bg-secondary">Annulé / Refusé</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <p class="small text-muted mb-3">
+                                        <i class="fa-regular fa-clock me-1"></i> {{ d.date|date('d/m/Y') }} à {{ d.date|date('H:i') }}
+                                    </p>
+
+                                    {% if d.status != 'ANNULE' and d.status != 'REFUSE' and d.status != 'REFUSE_LU' %}
+                                        <div class="d-flex gap-2 border-top pt-3 mt-2">
+                                            <button class="btn btn-outline-danger btn-sm flex-fill fw-bold" data-bs-toggle="modal" data-bs-target="#cancelModal{{ d.id }}">Annuler</button>
+                                            <button class="btn btn-outline-primary btn-sm flex-fill fw-bold" data-bs-toggle="modal" data-bs-target="#moveModal{{ d.id }}">Déplacer</button>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="cancelModal{{ d.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content bg-body">
+                                        <div class="modal-header border-bottom">
+                                            <h5 class="modal-title fw-bold text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Confirmer l'annulation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Êtes-vous sûr de vouloir annuler votre intervention de <strong>{{ d.serviceType }}</strong> prévue le {{ d.date|date('d/m/Y à H:i') }} ?
+                                        </div>
+                                        <div class="modal-footer border-top">
+                                            <form action="{{ path('client_reponse', {'id': d.id}) }}" method="POST">
+                                                <input type="hidden" name="action" value="annuler">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Retour</button>
+                                                <button type="submit" class="btn btn-danger fw-bold">Oui, annuler</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="moveModal{{ d.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content bg-body">
+                                        <div class="modal-header border-bottom">
+                                            <h5 class="modal-title fw-bold text-primary"><i class="fa-solid fa-clock-rotate-left me-2"></i>Demander un déplacement</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form action="{{ path('client_reponse', {'id': d.id}) }}" method="POST">
+                                            <div class="modal-body">
+                                                <p class="small text-muted mb-3">Choisissez une nouvelle date et heure pour votre intervention. L'artisan devra valider cette nouvelle proposition.</p>
+                                                <input type="hidden" name="action" value="demander_deplacement">
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <label class="form-label small fw-bold">Nouvelle date</label>
+                                                        <input type="date" name="new_date" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label small fw-bold">Nouvelle heure</label>
+                                                        <input type="time" name="new_time" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-top">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <button type="submit" class="btn btn-primary fw-bold">Envoyer la demande</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% else %}
+                            <div class="text-center p-4 text-muted bg-body rounded border">
+                                <i class="fa-regular fa-folder-open fs-1 mb-2 opacity-50"></i>
+                                <p class="mb-0">Vous n'avez aucun rendez-vous pour le moment.</p>
+                                <a href="{{ path('app_planning') }}" class="btn btn-primary btn-sm mt-3 fw-bold">Prendre rendez-vous</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('turbo:load', () => {
+            const el = document.getElementById('personal-calendar');
+            if(!el) return;
+            el.innerHTML = '';
+
+            const cal = new FullCalendar.Calendar(el, {
+                initialView: 'timeGridWeek',
+                locale: 'fr',
+                firstDay: 1,
+                allDaySlot: false,
+                selectable: false,
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'timeGridWeek,listWeek'
+                },
+                buttonText: { week: 'Semaine', list: 'Liste' },
+                events: {{ events|raw }}
+            });
+
+            cal.render();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,10 @@
+parameters:
+    organilog_token: '%env(ORGANILOG_TOKEN)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'

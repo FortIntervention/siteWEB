@@ -1,0 +1,120 @@
+/* Style pour la section Hero */
+.hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    color: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Style pour les Cartes de Services */
+.service-card {
+    transition: all 0.3s ease-in-out;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.service-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.service-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge-urgence {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #e60000;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    z-index: 3;
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -30px auto 15px;
+    position: relative;
+    z-index: 4;
+    border: 3px solid white;
+    color: #0d6efd;
+}
+
+
+/* On force une couleur gris clair qui tranche sur le noir */
+.footer-text {
+    color: #b0b0b0 !important; /* Gris clair */
+    font-size: 0.9rem;
+}
+
+.footer-link {
+    color: #d1d1d1 !important;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-link:hover {
+    color: #ff4d4d !important; /* Rouge vif au survol pour le rappel urgence */
+}
+
+.insurance-logos {
+    color: #ffffff;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+/* Animation des logos d'assurances */
+.grayscale-logos img {
+    filter: grayscale(100%) brightness(1.5);
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.grayscale-logos img:hover {
+    filter: grayscale(0%) brightness(1);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* On s'assure que le body ne déborde pas à cause du Full Width du Hero */
+body {
+    overflow-x: hidden;
+}
